@@ -1,0 +1,1 @@
+type Recurrence = "Dayly" | "Weekly" | "Monthly" | "Yearly" | "EveryOtherWeek" | "EveryOtherMonth" | null;
