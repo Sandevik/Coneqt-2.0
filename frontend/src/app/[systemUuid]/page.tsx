@@ -69,61 +69,61 @@ export default function page() {
         <li className='bg-gray-100 rounded-md h-[100dvh]'>
           <div className='flex justify-between p-2 text-lg'>
             <div className=''>Måndag</div>
-            <div className="font-semibold">17-6</div>
+            <div className="font-semibold">{getDateRangeOfWeek(currentWeek, currentYear)[0]}</div>
           </div>
           <div className='flex gap-2 flex-col'>
             {shifts.filter(shift => new Date(shift.date).getDay() === 1).map(shift => <Shift key={shift.uuid} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shift={shift}/>)}
           </div>
         </li>
-        <li className='bg-gray-100 rounded-md h-[100dvh]'>
+        <li className='bg-gray-100 rounded-md h-[100dvh] px-2'>
           <div className='flex justify-between p-2 text-lg'>
             <div className=''>Tisdag</div>
-            <div className="font-semibold">18-6</div>
+            <div className="font-semibold">{getDateRangeOfWeek(currentWeek, currentYear)[1]}</div>
           </div>
           <div className='flex gap-2 flex-col'>
             {shifts.filter(shift => new Date(shift.date).getDay() === 2).map(shift => <Shift key={shift.uuid} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shift={shift}/>)}
           </div>
         </li>
-        <li className='bg-gray-100 rounded-md h-[100dvh]'>
+        <li className='bg-gray-100 rounded-md h-[100dvh] px-2'>
           <div className='flex justify-between p-2 text-lg'>
             <div className=''>Onsdag</div>
-            <div className="font-semibold">19-6</div>
+            <div className="font-semibold">{getDateRangeOfWeek(currentWeek, currentYear)[2]}</div>
           </div>
           <div className='flex gap-2 flex-col'>
             {shifts.filter(shift => new Date(shift.date).getDay() === 3).map(shift => <Shift key={shift.uuid} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shift={shift}/>)}
           </div>
         </li>
-        <li className='bg-gray-100 rounded-md h-[100dvh]'>
+        <li className='bg-gray-100 rounded-md h-[100dvh] px-2'>
           <div className='flex justify-between p-2 text-lg'>
             <div className=''>Torsdag</div>
-            <div className="font-semibold">20-6</div>
+            <div className="font-semibold">{getDateRangeOfWeek(currentWeek, currentYear)[3]}</div>
           </div>
           <div className='flex gap-2 flex-col'>
             {shifts.filter(shift => new Date(shift.date).getDay() === 4).map(shift => <Shift key={shift.uuid} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shift={shift}/>)}
           </div>
         </li>
-        <li className='bg-gray-100 rounded-md h-[100dvh]'>
+        <li className='bg-gray-100 rounded-md h-[100dvh] px-2'>
           <div className='flex justify-between p-2 text-lg'>
             <div className=''>Fredag</div>
-            <div className="font-semibold">21-6</div>
+            <div className="font-semibold">{getDateRangeOfWeek(currentWeek, currentYear)[4]}</div>
           </div>
           <div className='flex gap-2 flex-col'>
             {shifts.filter(shift => new Date(shift.date).getDay() === 5).map(shift => <Shift key={shift.uuid} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shift={shift}/>)}
           </div>
         </li>
-        <li className='bg-gray-100 rounded-md h-[100dvh]'>
+        <li className='bg-gray-100 rounded-md h-[100dvh] px-2'>
           <div className='flex justify-between p-2 text-lg'>
             <div className=''>Lördag</div>
-            <div className="font-semibold">22-6</div>
+            <div className="font-semibold">{getDateRangeOfWeek(currentWeek, currentYear)[5]}</div>
           </div>
           <div className='flex gap-2 flex-col'>
             {shifts.filter(shift => new Date(shift.date).getDay() === 6).map(shift => <Shift key={shift.uuid} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shift={shift}/>)}
           </div>
         </li>
-        <li className='bg-gray-100 rounded-md h-[100dvh]'>
+        <li className='bg-gray-100 rounded-md h-[100dvh] px-2'>
           <div className='flex justify-between p-2 text-lg'>
             <div className=''>Söndag</div>
-            <div className="font-semibold">23-6</div>
+            <div className="font-semibold">{getDateRangeOfWeek(currentWeek, currentYear)[6]}</div>
           </div>
           <div className='flex gap-2 flex-col'>
             {shifts.filter(shift => new Date(shift.date).getDay() === 0).map(shift => <Shift key={shift.uuid} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shift={shift}/>)}

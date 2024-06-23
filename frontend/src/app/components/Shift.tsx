@@ -18,7 +18,7 @@ export default function Shift({shift, selectedShift, setSelectedShift}: { shift:
   }
 
   return (
-    <div onClick={() => selectShift()} className={`relative z-30 w-[calc(((100dvw/7)-0.6rem))] p-1 h-24 rounded-md flex flex-col justify-between border-2 transition-all ${selectedShift?.uuid === shift.uuid ? "border-gray-600 opacity-100 bg-gray-300 pointer-events-none" : "border-transparent opacity-80 bg-gray-200 cursor-pointer pointer-events-auto"}`}>
+    <div onClick={() => selectShift()} className={`relative z-30 w-full p-1 h-24 rounded-md flex flex-col justify-between border-2 transition-all ${selectedShift?.uuid === shift.uuid ? "border-gray-600 opacity-100 bg-gray-300 pointer-events-none px-2" : "border-transparent bg-gray-200 cursor-pointer pointer-events-auto"}`}>
       <RiRestartLine className='absolute top-1 right-1'/>
       <div className="text-xl">{shift.date}</div>
       <div>{shift.note}</div>
