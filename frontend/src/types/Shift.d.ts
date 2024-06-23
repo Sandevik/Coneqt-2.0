@@ -1,4 +1,5 @@
 import { Worker } from "./Worker";
+import { Recurrence } from "./Recurrence"
 
 export interface Shift {
     uuid: string,
@@ -12,9 +13,3 @@ export interface Shift {
     category?: string,
 }
 
-export enum Recurrence {
-    Dayly = 0,
-    Weekly = 1,
-    Monthly = 2,
-    Yearly = 3
-}
