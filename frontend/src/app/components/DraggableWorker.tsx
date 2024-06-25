@@ -9,7 +9,7 @@ export default function DraggableWorker({worker, handleOnDrag, clickedWorker, se
   
 
   return (
-    <div draggable onClick={() => setClickedWorker(worker)} onDragStart={(e) => handleOnDrag(e, worker)} className='neuphormism relative z-10 h-12 flex items-center justify-between rounded-md bg-gray-300 px-2'>
+    <li draggable onClick={() => setClickedWorker(worker)} onDragStart={(e) => handleOnDrag(e, worker)} className='neuphormism relative z-10 h-12 flex items-center justify-between rounded-md bg-gray-300 px-2'>
         <div className="flex gap-2 items-center"> <FaClipboardUser/> {worker.firstName} {worker.lastName}</div>
         <div>{worker.role}</div>
 
@@ -18,6 +18,6 @@ export default function DraggableWorker({worker, handleOnDrag, clickedWorker, se
           <Link href={"#"} className='p-1'>Se anställd</Link>
           <RiTriangleFill className='absolute text-black -right-5 text-2xl rotate-90'/>
         </div>
-    </div>
+    </li>
   )
 }

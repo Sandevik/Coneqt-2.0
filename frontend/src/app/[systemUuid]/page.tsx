@@ -7,6 +7,10 @@ import Shift from '../components/Shift'
 import ExpandedShift from '../components/ExpandedShift'
 import { Shift as _Shift } from '@/types/Shift'
 import { useRouter } from 'next/navigation'
+import { IoExpandOutline } from "react-icons/io5";
+import FocusedWeekDay from "../components/FocusedWeekDay"
+
+const testShifts: _Shift[] = [{date: "6-19-2024", startTime: "17:00", note: "Onsdagar vanlig", workersNeeded: 4, workers: [], shiftCompletionPercentage: 60, uuid: "sdmadaddaggfsds", recurring: true, recurringPeriod: 1}, {date: "6-20-2024", startTime: "17:00", note: "Torsdagar vanlig", workersNeeded: 4, workers: [], shiftCompletionPercentage: 60, uuid: "sadasd", recurring: true, recurringPeriod: 1},{date: "6-20-2024", startTime: "11:00", note: "Kylar Extra", workersNeeded: 1, workers: [], shiftCompletionPercentage: 60, uuid: "sadasdsadasddsad", recurring: false, recurringPeriod: 4}]
 
 export default function page() {
     const params = useParams();
@@ -15,8 +19,9 @@ export default function page() {
     const [system] = useState<System>({name: "HB Åkeri", uuid: "12adad-asdas-21dgff-feda"}) 
     const [currentWeek, setCurrentWeek] = useState<number>(getDateWeek(new Date()))
     const [currentYear, setCurrentYear] = useState<number>(new Date().getFullYear())
+    const [focusDay, setFocusDay] = useState<number | null>(null);
     const [selectedShift, setSelectedShift] = useState<_Shift | null>(null)
-    const [shifts, setShifts] = useState<_Shift[]>([{date: "6-19-2024", note: "Onsdagar vanlig", workersNeeded: 4, workers: [], shiftCompletionPercentage: 60, uuid: "sdmadaddaggfsds", recurring: true, recurringPeriod: 1}, {date: "6-20-2024", note: "Torsdagar vanlig", workersNeeded: 4, workers: [], shiftCompletionPercentage: 60, uuid: "sadasd", recurring: true, recurringPeriod: 1},{date: "6-20-2024", note: "Kylar Extra", workersNeeded: 1, workers: [], shiftCompletionPercentage: 60, uuid: "sadasdsadasddsad", recurring: false, recurringPeriod: 4}])
+    const [shifts, setShifts] = useState<Record<number, _Shift[]>>(sortIncommingShifts(testShifts))
 
 
     function getDateRangeOfWeek(weekNo: number, y: number){
@@ -49,6 +54,21 @@ export default function page() {
   const close = () => {
     setSelectedShift(null);
   }
+
+  function sortIncommingShifts(shifts: _Shift[]): Record<number, _Shift[]>{
+    let _shifts: Record<number, _Shift[]> = {}; 
+    for (let i = 0; i < 7; i++) {
+      _shifts[i] = [];
+      shifts.forEach(shift => {
+        if (new Date(shift.date).getDay() === i) {
+          _shifts[i].push(shift);
+        }
+      })
+      _shifts[i].sort((a, b) => (a.startTime||"").localeCompare(b.startTime || ""))
+    }
+    
+    return _shifts;
+  }
   
   useEffect(()=>{
     if (selectedShift !== null) {
@@ -58,6 +78,41 @@ export default function page() {
     }
   }, [selectedShift])
 
+  useEffect(()=>{
+    if (focusDay !== null) {
+      router.push(`?focused-day=${focusDay}`)
+    } else {
+      router.push(pathName.split("?")[0])
+    }
+  }, [focusDay])
+  
+
+  const handleOnDrag = (e: React.DragEvent, shift: _Shift) => {
+    e.dataTransfer.setData("shift", JSON.stringify(shift));
+  }
+
+  const handleDrop = (e: React.DragEvent, toWeekDay: number) => {
+    const shift = JSON.parse(e.dataTransfer.getData("shift") as string) as _Shift;
+    const _shifts = {...shifts};
+    if (!_shifts[toWeekDay].find(s => s.uuid === shift.uuid)) _shifts[toWeekDay].push(shift);
+    for (let i = 0; i < 7; i++) {
+      _shifts[i].sort((a, b) => (a.startTime||"").localeCompare(b.startTime || ""));
+      if (i === toWeekDay) {
+        continue;
+      } else {
+        _shifts[i] = _shifts[i].filter(_shift => _shift.uuid !== shift.uuid);
+      }
+      
+    }
+    
+    setShifts(_shifts);
+  }
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.stopPropagation()
+    e.preventDefault();
+  }
+
   return (
     <div className={`overflow-hidden h-full w-full z-0`}>
       <div className='flex justify-center items-center gap-3 z-30'>
@@ -66,74 +121,86 @@ export default function page() {
       </div>
       
       <ul className='grid grid-cols-7 gap-2 h-full mt-2' id='shifts'>
-        <li className='bg-gray-100 rounded-md h-[100dvh]'>
-          <div className='flex justify-between p-2 text-lg'>
-            <div className=''>Måndag</div>
+
+        <li className={`bg-gray-100 rounded-md h-[calc(100dvh-104px)] transition-all ${focusDay === 0 ? "w-[100dvw] z-50" : "w-auto"}`} onDrop={(e) => handleDrop(e, 1)} onDragOver={handleDragOver}>
+          <div className={`justify-between p-1 text-lg ${focusDay === 0 ? "hidden" : "flex"}`}>
+            <div className='flex gap-1 items-center'><IoExpandOutline onClick={() => setFocusDay(0)} className='cursor-pointer' /> Måndag</div>
             <div className="font-semibold">{getDateRangeOfWeek(currentWeek, currentYear)[0]}</div>
           </div>
           <div className='flex gap-2 flex-col'>
-            {shifts.filter(shift => new Date(shift.date).getDay() === 1).map(shift => <Shift key={shift.uuid} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shift={shift}/>)}
+            {shifts[1].map(shift => <Shift handleOnDrag={handleOnDrag} draggable key={shift.uuid} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shift={shift}/>)}
+          </div>
+          
+          <div className={`${focusDay === 0 ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"} transition-all`}>
+            hgfhgjhgjghj
           </div>
         </li>
-        <li className='bg-gray-100 rounded-md h-[100dvh] px-2'>
-          <div className='flex justify-between p-2 text-lg'>
-            <div className=''>Tisdag</div>
+
+        <li className='bg-gray-100 rounded-md h-[calc(100dvh-104px)] px-2' onDrop={(e) => handleDrop(e, 2)} onDragOver={handleDragOver}>
+          <div className='flex justify-between p-1 text-lg'>
+            <div className='flex gap-1 items-center'><IoExpandOutline onClick={() => setFocusDay(1)} className='cursor-pointer' /> Tisdag</div>
             <div className="font-semibold">{getDateRangeOfWeek(currentWeek, currentYear)[1]}</div>
           </div>
-          <div className='flex gap-2 flex-col'>
-            {shifts.filter(shift => new Date(shift.date).getDay() === 2).map(shift => <Shift key={shift.uuid} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shift={shift}/>)}
+          <div className='flex gap-2 flex-col' >
+            {shifts[2].map(shift => <Shift handleOnDrag={handleOnDrag} draggable key={shift.uuid} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shift={shift}/>)}
           </div>
         </li>
-        <li className='bg-gray-100 rounded-md h-[100dvh] px-2'>
-          <div className='flex justify-between p-2 text-lg'>
-            <div className=''>Onsdag</div>
+
+        <li className='bg-gray-100 rounded-md h-[calc(100dvh-104px)] px-2' onDrop={(e) => handleDrop(e, 3)} onDragOver={handleDragOver}>
+          <div className='flex justify-between p-1 text-lg'>
+            <div className='flex gap-1 items-center'><IoExpandOutline onClick={() => setFocusDay(2)} className='cursor-pointer' /> Onsdag</div>
             <div className="font-semibold">{getDateRangeOfWeek(currentWeek, currentYear)[2]}</div>
           </div>
           <div className='flex gap-2 flex-col'>
-            {shifts.filter(shift => new Date(shift.date).getDay() === 3).map(shift => <Shift key={shift.uuid} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shift={shift}/>)}
+            {shifts[3].map(shift => <Shift handleOnDrag={handleOnDrag} draggable key={shift.uuid} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shift={shift}/>)}
           </div>
         </li>
-        <li className='bg-gray-100 rounded-md h-[100dvh] px-2'>
-          <div className='flex justify-between p-2 text-lg'>
-            <div className=''>Torsdag</div>
+
+        <li className='bg-gray-100 rounded-md h-[calc(100dvh-104px)] px-2' onDrop={(e) => handleDrop(e, 4)} onDragOver={handleDragOver}>
+          <div className='flex justify-between p-1 text-lg'>
+            <div className='flex gap-1 items-center'> <IoExpandOutline onClick={() => setFocusDay(3)} className='cursor-pointer' /> Torsdag</div>
             <div className="font-semibold">{getDateRangeOfWeek(currentWeek, currentYear)[3]}</div>
           </div>
           <div className='flex gap-2 flex-col'>
-            {shifts.filter(shift => new Date(shift.date).getDay() === 4).map(shift => <Shift key={shift.uuid} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shift={shift}/>)}
+            {shifts[4].map(shift => <Shift handleOnDrag={handleOnDrag} draggable key={shift.uuid} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shift={shift}/>)}
           </div>
         </li>
-        <li className='bg-gray-100 rounded-md h-[100dvh] px-2'>
-          <div className='flex justify-between p-2 text-lg'>
-            <div className=''>Fredag</div>
+
+        <li className='bg-gray-100 rounded-md h-[calc(100dvh-104px)] px-2' onDrop={(e) => handleDrop(e, 5)} onDragOver={handleDragOver}>
+          <div className='flex justify-between p-1 text-lg'>
+            <div className='flex gap-1 items-center'> <IoExpandOutline onClick={() => setFocusDay(4)} className='cursor-pointer' /> Fredag</div>
             <div className="font-semibold">{getDateRangeOfWeek(currentWeek, currentYear)[4]}</div>
           </div>
           <div className='flex gap-2 flex-col'>
-            {shifts.filter(shift => new Date(shift.date).getDay() === 5).map(shift => <Shift key={shift.uuid} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shift={shift}/>)}
+            {shifts[5].map(shift => <Shift handleOnDrag={handleOnDrag} draggable key={shift.uuid} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shift={shift}/>)}
           </div>
         </li>
-        <li className='bg-gray-100 rounded-md h-[100dvh] px-2'>
-          <div className='flex justify-between p-2 text-lg'>
-            <div className=''>Lördag</div>
+
+        <li className='bg-gray-100 rounded-md h-[calc(100dvh-104px)] px-2' onDrop={(e) => handleDrop(e, 6)} onDragOver={handleDragOver}>
+          <div className='flex justify-between p-1 text-lg'>
+            <div className='flex gap-1 items-center'> <IoExpandOutline onClick={() => setFocusDay(5)} className='cursor-pointer' /> Lördag</div>
             <div className="font-semibold">{getDateRangeOfWeek(currentWeek, currentYear)[5]}</div>
           </div>
           <div className='flex gap-2 flex-col'>
-            {shifts.filter(shift => new Date(shift.date).getDay() === 6).map(shift => <Shift key={shift.uuid} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shift={shift}/>)}
+            {shifts[6].map(shift => <Shift handleOnDrag={handleOnDrag} draggable key={shift.uuid} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shift={shift}/>)}
           </div>
         </li>
-        <li className='bg-gray-100 rounded-md h-[100dvh] px-2'>
-          <div className='flex justify-between p-2 text-lg'>
-            <div className=''>Söndag</div>
+
+        <li className='bg-gray-100 rounded-md h-[calc(100dvh-104px)] px-2' onDrop={(e) => handleDrop(e, 0)} onDragOver={handleDragOver}>
+          <div className='flex justify-between p-1 text-lg'>
+            <div className='flex gap-1 items-center'> <IoExpandOutline onClick={() => setFocusDay(6)} className='cursor-pointer' /> Söndag</div>
             <div className="font-semibold">{getDateRangeOfWeek(currentWeek, currentYear)[6]}</div>
           </div>
           <div className='flex gap-2 flex-col'>
-            {shifts.filter(shift => new Date(shift.date).getDay() === 0).map(shift => <Shift key={shift.uuid} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shift={shift}/>)}
+            {shifts[0].map(shift => <Shift handleOnDrag={handleOnDrag} draggable key={shift.uuid} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shift={shift}/>)}
           </div>
         </li>
+
       </ul>
 
       <ExpandedShift close={close} selectedShift={selectedShift}/>
 
-
+      <FocusedWeekDay />
 
       {/* Skapa arbetspass
       <br />

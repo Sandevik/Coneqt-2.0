@@ -84,6 +84,10 @@ export default function ExpandedShift({selectedShift, close}: {selectedShift: Sh
                     <h3>Arbetspass info</h3>
                 </div>
             
+
+
+
+            
                 <div className='h-full cursor-default'>
                     <div className='flex justify-between items-center relative'>
                         <div className='absolute top-1 left-1 z-50'>
