@@ -22,7 +22,7 @@ export default function page() {
     const [focusDay, setFocusDay] = useState<number | null>(null);
     const [selectedShift, setSelectedShift] = useState<_Shift | null>(null)
     const [shifts, setShifts] = useState<Record<number, _Shift[]>>(sortIncommingShifts(testShifts))
-
+    const [rightClickedShift, setRightClickedShift] = useState<_Shift | null>(null);
 
     
 
@@ -90,6 +90,17 @@ export default function page() {
     e.preventDefault();
   }
 
+  useEffect(() => {
+    document.addEventListener("click", (e) => {
+      //@ts-ignore
+      if (e.target.classList.contains("shift-list")) {
+        setRightClickedShift(null)
+      }
+    })
+    return () => document.removeEventListener("click", () => {})
+  },[])
+
+
   return (
     <div className={`overflow-hidden h-full w-full z-0`}>
       <div className='flex justify-center items-center gap-3 z-30'>
@@ -99,31 +110,31 @@ export default function page() {
       
       <ul className='grid grid-cols-7 gap-2 h-full mt-2' id='shifts'>
 
-        <WeekDay day={1} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shifts={shifts} handleDragOver={handleDragOver} handleDrop={handleDrop} handleOnDrag={handleOnDrag} setFocusDay={setFocusDay} focusDay={focusDay} currentWeek={currentWeek} currentYear={currentYear}>
+        <WeekDay rightClickedShift={rightClickedShift} setRightClickedShift={setRightClickedShift} day={1} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shifts={shifts} handleDragOver={handleDragOver} handleDrop={handleDrop} handleOnDrag={handleOnDrag} setFocusDay={setFocusDay} focusDay={focusDay} currentWeek={currentWeek} currentYear={currentYear}>
           Måndag
         </WeekDay>
 
-        <WeekDay day={2} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shifts={shifts} handleDragOver={handleDragOver} handleDrop={handleDrop} handleOnDrag={handleOnDrag} setFocusDay={setFocusDay} focusDay={focusDay} currentWeek={currentWeek} currentYear={currentYear}>
+        <WeekDay rightClickedShift={rightClickedShift} setRightClickedShift={setRightClickedShift} day={2} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shifts={shifts} handleDragOver={handleDragOver} handleDrop={handleDrop} handleOnDrag={handleOnDrag} setFocusDay={setFocusDay} focusDay={focusDay} currentWeek={currentWeek} currentYear={currentYear}>
           Tisdag
         </WeekDay>
 
-        <WeekDay day={3} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shifts={shifts} handleDragOver={handleDragOver} handleDrop={handleDrop} handleOnDrag={handleOnDrag} setFocusDay={setFocusDay} focusDay={focusDay} currentWeek={currentWeek} currentYear={currentYear}>
+        <WeekDay rightClickedShift={rightClickedShift} setRightClickedShift={setRightClickedShift} day={3} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shifts={shifts} handleDragOver={handleDragOver} handleDrop={handleDrop} handleOnDrag={handleOnDrag} setFocusDay={setFocusDay} focusDay={focusDay} currentWeek={currentWeek} currentYear={currentYear}>
           Onsdag
         </WeekDay>
 
-        <WeekDay day={4} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shifts={shifts} handleDragOver={handleDragOver} handleDrop={handleDrop} handleOnDrag={handleOnDrag} setFocusDay={setFocusDay} focusDay={focusDay} currentWeek={currentWeek} currentYear={currentYear}>
+        <WeekDay rightClickedShift={rightClickedShift} setRightClickedShift={setRightClickedShift} day={4} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shifts={shifts} handleDragOver={handleDragOver} handleDrop={handleDrop} handleOnDrag={handleOnDrag} setFocusDay={setFocusDay} focusDay={focusDay} currentWeek={currentWeek} currentYear={currentYear}>
           Torsdag
         </WeekDay>
 
-        <WeekDay day={5} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shifts={shifts} handleDragOver={handleDragOver} handleDrop={handleDrop} handleOnDrag={handleOnDrag} setFocusDay={setFocusDay} focusDay={focusDay} currentWeek={currentWeek} currentYear={currentYear}>
+        <WeekDay rightClickedShift={rightClickedShift} setRightClickedShift={setRightClickedShift} day={5} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shifts={shifts} handleDragOver={handleDragOver} handleDrop={handleDrop} handleOnDrag={handleOnDrag} setFocusDay={setFocusDay} focusDay={focusDay} currentWeek={currentWeek} currentYear={currentYear}>
           Fredag
         </WeekDay>
 
-        <WeekDay day={6} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shifts={shifts} handleDragOver={handleDragOver} handleDrop={handleDrop} handleOnDrag={handleOnDrag} setFocusDay={setFocusDay} focusDay={focusDay} currentWeek={currentWeek} currentYear={currentYear}>
+        <WeekDay rightClickedShift={rightClickedShift} setRightClickedShift={setRightClickedShift} day={6} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shifts={shifts} handleDragOver={handleDragOver} handleDrop={handleDrop} handleOnDrag={handleOnDrag} setFocusDay={setFocusDay} focusDay={focusDay} currentWeek={currentWeek} currentYear={currentYear}>
           Lördag
         </WeekDay>
 
-        <WeekDay day={0} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shifts={shifts} handleDragOver={handleDragOver} handleDrop={handleDrop} handleOnDrag={handleOnDrag} setFocusDay={setFocusDay} focusDay={focusDay} currentWeek={currentWeek} currentYear={currentYear}>
+        <WeekDay rightClickedShift={rightClickedShift} setRightClickedShift={setRightClickedShift} day={0} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shifts={shifts} handleDragOver={handleDragOver} handleDrop={handleDrop} handleOnDrag={handleOnDrag} setFocusDay={setFocusDay} focusDay={focusDay} currentWeek={currentWeek} currentYear={currentYear}>
           Söndag
         </WeekDay>
 

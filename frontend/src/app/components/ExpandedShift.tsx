@@ -96,7 +96,7 @@ export default function ExpandedShift({selectedShift, close}: {selectedShift: Sh
                     </div>
 
                     <ul id='selectBooked' onClick={(e) => handleDeselect(e)} onDrop={handleOnDropBooked} onDragOver={handleDragOver} className='relative cursor-default z-40 h-full pt-10 bg-gray-200 min-w-[20dvw] p-2 flex flex-col gap-3 rounded-md border-2 border-gray-300'>
-                        <div className='absolute top-[50%] right-[50%] translate-x-[50%] -translate-y-[50%] text-gray-500 text-lg z-0 pointer-events-none'>Drag arbetare hit!</div>
+                        <div className='absolute top-[50%] right-[50%] translate-x-[50%] -translate-y-[50%] text-gray-500 text-lg z-0 pointer-events-none'>Drag hit arbetare!</div>
                         {bookedWorkers.map(worker => <DraggableWorker moveTo={moveWorkerFromBooked} key={worker.uuid+"b"} clickedWorker={clickedWorker} setClickedWorker={setClickedWorker} handleOnDrag={handleOnDrag} worker={worker} />)}
                     </ul>
                 </div>
