@@ -152,7 +152,7 @@ const testShifts: _Shift[] = [{
     }
 ]
 
-export default function page() {
+export default function Page() {
   const params = useParams();
   const pathName = usePathname();
   const router = useRouter();
