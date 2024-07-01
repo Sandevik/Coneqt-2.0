@@ -7,7 +7,7 @@ import { VscDebugStart } from "react-icons/vsc";
 
 
 
-export default function Shift({rightClickedShift, setRightClickedShift, shift, selectedShift, setSelectedShift, draggable, handleOnDrag}: {rightClickedShift: _Shift | null, setRightClickedShift: React.Dispatch<React.SetStateAction<_Shift | null>>, handleOnDrag: (e: React.DragEvent, shift: _Shift) => void, draggable?: boolean, shift: _Shift, selectedShift: _Shift | null, setSelectedShift: React.Dispatch<React.SetStateAction<_Shift | null>>}) {
+export default function Shift({duplicateShift, day, moveShift, rightClickedShift, setRightClickedShift, shift, selectedShift, setSelectedShift, draggable, handleOnDrag}: {duplicateShift: (shift: _Shift) => void, day: number, moveShift: (shift: _Shift, toDay: number) => void, rightClickedShift: _Shift | null, setRightClickedShift: React.Dispatch<React.SetStateAction<_Shift | null>>, handleOnDrag: (e: React.DragEvent, shift: _Shift) => void, draggable?: boolean, shift: _Shift, selectedShift: _Shift | null, setSelectedShift: React.Dispatch<React.SetStateAction<_Shift | null>>}) {
   const percentage: number = (shift.shiftCompletionPercentage || 0) > 100 ? 100 : (shift.shiftCompletionPercentage || 0) < 0 ? 0 : (shift.shiftCompletionPercentage || 0);
   const [viewDayOptions, setViewDayOptions] = useState<boolean>(false);
 
@@ -36,23 +36,24 @@ export default function Shift({rightClickedShift, setRightClickedShift, shift, s
           <button className='context relative flex flex-col cursor-pointer w-full hover:bg-gray-900 p-1 rounded' onClick={() => setViewDayOptions(!viewDayOptions)}>
             <div className="context flex justify-between items-center w-full"><div>Flytta</div> <LuMoveHorizontal /> </div>
             <ol className={`context absolute z-60 top-0 bg-[#000000] -translate-y-1.5 text-white p-2 -translate-x-[130px] w-[100px] flex flex-col items-start gap-1 transition-opacity rounded-md ${viewDayOptions ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"} `}>
-              <li className='context hover:bg-gray-900 rounded-md py-1 w-full'>Måndag</li>
-              <li className='context hover:bg-gray-900 rounded-md py-1 w-full'>Tisdag</li>
-              <li className='context hover:bg-gray-900 rounded-md py-1 w-full'>Onsdag</li>
-              <li className='context hover:bg-gray-900 rounded-md py-1 w-full'>Torsdag</li>
-              <li className='context hover:bg-gray-900 rounded-md py-1 w-full'>Fredag</li>
-              <li className='context hover:bg-gray-900 rounded-md py-1 w-full'>Lördag</li>
-              <li className='context hover:bg-gray-900 rounded-md py-1 w-full'>Söndag</li>
+              {day !== 1 && <li onClick={() => {moveShift(shift, 1); setRightClickedShift(null); setViewDayOptions(false);}} className='context hover:bg-gray-900 rounded-md py-1 w-full'>Måndag</li>}
+              {day !== 2 && <li onClick={() => {moveShift(shift, 2); setRightClickedShift(null); setViewDayOptions(false);}} className='context hover:bg-gray-900 rounded-md py-1 w-full'>Tisdag</li>}
+              {day !== 3 && <li onClick={() => {moveShift(shift, 3); setRightClickedShift(null); setViewDayOptions(false);}} className='context hover:bg-gray-900 rounded-md py-1 w-full'>Onsdag</li>}
+              {day !== 4 && <li onClick={() => {moveShift(shift, 4); setRightClickedShift(null); setViewDayOptions(false);}} className='context hover:bg-gray-900 rounded-md py-1 w-full'>Torsdag</li>}
+              {day !== 5 && <li onClick={() => {moveShift(shift, 5); setRightClickedShift(null); setViewDayOptions(false);}} className='context hover:bg-gray-900 rounded-md py-1 w-full'>Fredag</li>}
+              {day !== 6 && <li onClick={() => {moveShift(shift, 6); setRightClickedShift(null); setViewDayOptions(false);}} className='context hover:bg-gray-900 rounded-md py-1 w-full'>Lördag</li>}
+              {day !== 0 && <li onClick={() => {moveShift(shift, 0); setRightClickedShift(null); setViewDayOptions(false);}} className='context hover:bg-gray-900 rounded-md py-1 w-full'>Söndag</li>}
               <RiTriangleFill className='absolute text-black -right-5 text-2xl rotate-90'/>
             </ol>
           </button>
-          <button onClick={() => setSelectedShift(shift)} className='flex justify-between items-center hover:bg-gray-900 p-1 rounded'>Öppna</button>
+          <button onClick={() => {duplicateShift(shift); setViewDayOptions(false); setRightClickedShift(null)}} className='context flex justify-between items-center hover:bg-gray-900 p-1 rounded'>Duplicera pass</button>
+          <button onClick={() => {setSelectedShift(shift); setViewDayOptions(false); setRightClickedShift(null)}} className='flex justify-between items-center hover:bg-gray-900 p-1 rounded'>Öppna</button>
           <RiTriangleFill className='absolute text-black -right-5 text-2xl rotate-90'/>
         </div>
       {shift.recurring && <RiRestartLine className='absolute top-1 right-1'/>}
       <div className=" flex gap-1 items-center text-md"><VscDebugStart/> <div className="text-xl">{shift.startTime}</div></div>
       <div className='flex justify-between'>
-        <div>{shift.note}</div>
+        <div>{shift.title}</div>
         <div>{shift.workers.length} / {shift.workersNeeded}</div>
       </div>
     </div>  

@@ -6,7 +6,7 @@ import Shift from "../components/Shift";
 
 
 
-export default function WeekDay({rightClickedShift, setRightClickedShift, children, focusDay, currentWeek, currentYear, setFocusDay, handleOnDrag, handleDrop, handleDragOver, selectedShift, setSelectedShift, shifts, day}: {rightClickedShift: _Shift | null, setRightClickedShift: React.Dispatch<React.SetStateAction<_Shift | null>>, day: number, children?: React.ReactNode, shifts: Record<number, _Shift[]>, setSelectedShift: React.Dispatch<React.SetStateAction<_Shift|null>>, selectedShift: _Shift|null, handleDragOver: (e: React.DragEvent) => void, handleDrop: (e: React.DragEvent, toWeekDay: number) => void, handleOnDrag: (e: React.DragEvent, shift: _Shift) => void, setFocusDay: React.Dispatch<React.SetStateAction<number|null>>, focusDay: number | null, currentWeek: number, currentYear: number}) {
+export default function WeekDay({duplicateShift, moveShift, rightClickedShift, setRightClickedShift, children, focusDay, currentWeek, currentYear, setFocusDay, handleOnDrag, handleDrop, handleDragOver, selectedShift, setSelectedShift, shifts, day}: {duplicateShift: (shift: _Shift) => void, moveShift: (shift: _Shift, toDay: number) => void, rightClickedShift: _Shift | null, setRightClickedShift: React.Dispatch<React.SetStateAction<_Shift | null>>, day: number, children?: React.ReactNode, shifts: Record<number, _Shift[]>, setSelectedShift: React.Dispatch<React.SetStateAction<_Shift|null>>, selectedShift: _Shift|null, handleDragOver: (e: React.DragEvent) => void, handleDrop: (e: React.DragEvent, toWeekDay: number) => void, handleOnDrag: (e: React.DragEvent, shift: _Shift) => void, setFocusDay: React.Dispatch<React.SetStateAction<number|null>>, focusDay: number | null, currentWeek: number, currentYear: number}) {
     
   
   
@@ -18,7 +18,7 @@ export default function WeekDay({rightClickedShift, setRightClickedShift, childr
         <div className="font-semibold">{getDateRangeOfWeek(currentWeek, currentYear)[day-1 < 0 ? 6 : day-1]}</div>
       </div>
       {focusDay === null && <div className='flex gap-2 flex-col p-2'>
-        {shifts[day].map(shift => <Shift rightClickedShift={rightClickedShift} setRightClickedShift={setRightClickedShift} handleOnDrag={handleOnDrag} draggable key={shift.uuid} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shift={shift}/>)}
+        {shifts[day].map(shift => <Shift duplicateShift={duplicateShift} day={day} moveShift={moveShift} rightClickedShift={rightClickedShift} setRightClickedShift={setRightClickedShift} handleOnDrag={handleOnDrag} draggable key={shift.uuid} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shift={shift}/>)}
       </div>}
     
       <div className={`${focusDay === day ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"} transition-all relative p-2 h-full w-full z-50`}>

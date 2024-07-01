@@ -4,7 +4,8 @@ import { Recurrence } from "./Recurrence"
 export interface Shift {
     uuid: string,
     date: string,
-    note: string,
+    title?: string
+    note?: string,
     desc?: string,
     workers: Worker[]
     shiftCompletionPercentage: number,
@@ -14,5 +15,6 @@ export interface Shift {
     category?: string,
     startTime?: string,
     endTime?: string,
+    objectives?: Objectives[]
 }
 

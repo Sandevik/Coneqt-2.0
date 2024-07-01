@@ -10,23 +10,103 @@ import { useRouter } from 'next/navigation'
 import FocusedWeekDay from "../components/FocusedWeekDay"
 import WeekDay from "@/app/components/WeekDay"
 
-const testShifts: _Shift[] = [{date: "6-19-2024", startTime: "17:00", note: "Onsdagar vanlig", workersNeeded: 4, workers: [], shiftCompletionPercentage: 60, uuid: "sdmadaddaggfsds", recurring: true, recurringPeriod: 1}, {date: "6-20-2024", startTime: "17:00", note: "Torsdagar vanlig", workersNeeded: 4, workers: [], shiftCompletionPercentage: 60, uuid: "sadasd", recurring: true, recurringPeriod: 1},{date: "6-20-2024", startTime: "11:00", note: "Kylar Extra", workersNeeded: 1, workers: [], shiftCompletionPercentage: 60, uuid: "sadasdsadasddsad", recurring: false, recurringPeriod: 4}]
+const testShifts: _Shift[] = [{
+  date: "7-4-2024", 
+  startTime: "17:00", 
+  title: "Extern", 
+  desc: "Två terminalare och två chaufförer behövs. Kör extern leveranser från Cola till Åhléns", 
+  workersNeeded: 4, 
+  workers: [], 
+  shiftCompletionPercentage: 60, 
+  uuid: "sdmadaddaggfsds", 
+  recurring: true, 
+  recurringPeriod: 1, 
+  objectives: [{
+    category: "Från Åhléns", 
+    objectives: [{
+      uuid: "sdadasdd", 
+      desc: "Från: 7806336829", 
+      checkable: true
+      }, {
+      uuid: "sdalkfla", 
+      desc: "Från: 7806336830", 
+      checkable: true
+      }, {
+        uuid: "sdalkfla", 
+        desc: "Från: 7806336831", 
+        checkable: true
+      }, {
+        uuid: "sdalkfla", 
+        desc: "Från: 7806336832", 
+        checkable: true
+      }]
+    }, {
+      category: "Till Åhléns", 
+      objectives: [
+        {
+          uuid: "sdalkfla", 
+          desc: "Till: 7806336833", 
+          checkable: true
+        }, {
+          uuid: "sdalkfla", 
+          desc: "Till: 7806336834", 
+          checkable: true
+        }, {
+          uuid: "sdalkfla", 
+          desc: "Till: 7806336835", 
+          checkable: true
+        }, {
+          uuid: "sdalkfla", 
+          desc: "Till: 7806336836", 
+          checkable: true
+        }
+      ]
+    }]
+  },
+  {
+    date: "7-4-2024", 
+    startTime: "11:00", 
+    title: "Göteborg & Malmö", 
+    desc: "Leverera till Göteborg, hämta tom burk i malmö, hämta kylar i Nässjö", 
+    workersNeeded: 4, 
+    workers: [], 
+    shiftCompletionPercentage: 60, 
+    uuid: "sdasdsdaggddfs", 
+    recurring: false, 
+    recurringPeriod: 4,
+    objectives: [{
+      category: "Körning",
+      objectives: [{
+        orderNum: 1,
+        uuid: "sdadas",
+        desc: "Lossa i Göteborg",
+        timeStamp: "17:30"
+      }, {
+        orderNum: 2,
+        uuid: "oihh",
+        desc: "Hämta tomburk i Malmö",
+        timeStamp: "09:00"
+      }, {
+        uuid: "ghhhd",
+        desc: "Lasta kylar i Nässjö",
+        
+
+      }]
+    }] 
+  }
+]
 
 export default function page() {
-    const params = useParams();
-    const pathName = usePathname();
-    const router = useRouter();
-    const [system] = useState<System>({name: "HB Åkeri", uuid: "12adad-asdas-21dgff-feda"}) 
-    const [currentWeek, setCurrentWeek] = useState<number>(getDateWeek(new Date()))
-    const [currentYear, setCurrentYear] = useState<number>(new Date().getFullYear())
-    const [focusDay, setFocusDay] = useState<number | null>(null);
-    const [selectedShift, setSelectedShift] = useState<_Shift | null>(null)
-    const [shifts, setShifts] = useState<Record<number, _Shift[]>>(sortIncommingShifts(testShifts))
-    const [rightClickedShift, setRightClickedShift] = useState<_Shift | null>(null);
-
-    
-
-  
+  const params = useParams();
+  const pathName = usePathname();
+  const router = useRouter();
+  const [system] = useState<System>({name: "HB Åkeri", uuid: "12adad-asdas-21dgff-feda"}) 
+  const [currentWeek, setCurrentWeek] = useState<number>(getDateWeek(new Date()))
+  const [currentYear, setCurrentYear] = useState<number>(new Date().getFullYear())
+  const [focusDay, setFocusDay] = useState<number | null>(null);
+  const [selectedShift, setSelectedShift] = useState<_Shift | null>(null)
+  const [shifts, setShifts] = useState<Record<number, _Shift[]>>(sortIncommingShifts(testShifts))
+  const [rightClickedShift, setRightClickedShift] = useState<_Shift | null>(null);
 
   const close = () => {
     setSelectedShift(null);
@@ -100,6 +180,20 @@ export default function page() {
     return () => document.removeEventListener("click", () => {})
   },[])
 
+  const moveShift = (shift: _Shift, _toDay: number) => {
+    const currentDay = new Date(shift.date).getDay();
+    let toDay = _toDay === 0 ? -7 : _toDay;
+    toDay = (currentDay - toDay) * -1;
+    console.log(new Date(shift.date).getDate()+ " + " + toDay + " = " + (new Date(shift.date).getDate() + toDay));
+    const newDate = new Date(new Date(shift.date).getFullYear(), new Date(shift.date).getMonth() - 1, new Date(shift.date).getDate() + toDay);
+    alert("Move shift, new date: " + newDate.toDateString());
+  }
+
+  const duplicateShift = (shift: _Shift) => {
+    alert("Duplicate shift")
+  }
+
+ 
 
   return (
     <div className={`overflow-hidden h-full w-full z-0`}>
@@ -110,31 +204,31 @@ export default function page() {
       
       <ul className='grid grid-cols-7 gap-2 h-full mt-2' id='shifts'>
 
-        <WeekDay rightClickedShift={rightClickedShift} setRightClickedShift={setRightClickedShift} day={1} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shifts={shifts} handleDragOver={handleDragOver} handleDrop={handleDrop} handleOnDrag={handleOnDrag} setFocusDay={setFocusDay} focusDay={focusDay} currentWeek={currentWeek} currentYear={currentYear}>
+        <WeekDay duplicateShift={duplicateShift}  moveShift={moveShift} rightClickedShift={rightClickedShift} setRightClickedShift={setRightClickedShift} day={1} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shifts={shifts} handleDragOver={handleDragOver} handleDrop={handleDrop} handleOnDrag={handleOnDrag} setFocusDay={setFocusDay} focusDay={focusDay} currentWeek={currentWeek} currentYear={currentYear}>
           Måndag
         </WeekDay>
 
-        <WeekDay rightClickedShift={rightClickedShift} setRightClickedShift={setRightClickedShift} day={2} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shifts={shifts} handleDragOver={handleDragOver} handleDrop={handleDrop} handleOnDrag={handleOnDrag} setFocusDay={setFocusDay} focusDay={focusDay} currentWeek={currentWeek} currentYear={currentYear}>
+        <WeekDay duplicateShift={duplicateShift} moveShift={moveShift} rightClickedShift={rightClickedShift} setRightClickedShift={setRightClickedShift} day={2} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shifts={shifts} handleDragOver={handleDragOver} handleDrop={handleDrop} handleOnDrag={handleOnDrag} setFocusDay={setFocusDay} focusDay={focusDay} currentWeek={currentWeek} currentYear={currentYear}>
           Tisdag
         </WeekDay>
 
-        <WeekDay rightClickedShift={rightClickedShift} setRightClickedShift={setRightClickedShift} day={3} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shifts={shifts} handleDragOver={handleDragOver} handleDrop={handleDrop} handleOnDrag={handleOnDrag} setFocusDay={setFocusDay} focusDay={focusDay} currentWeek={currentWeek} currentYear={currentYear}>
+        <WeekDay duplicateShift={duplicateShift} moveShift={moveShift} rightClickedShift={rightClickedShift} setRightClickedShift={setRightClickedShift} day={3} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shifts={shifts} handleDragOver={handleDragOver} handleDrop={handleDrop} handleOnDrag={handleOnDrag} setFocusDay={setFocusDay} focusDay={focusDay} currentWeek={currentWeek} currentYear={currentYear}>
           Onsdag
         </WeekDay>
 
-        <WeekDay rightClickedShift={rightClickedShift} setRightClickedShift={setRightClickedShift} day={4} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shifts={shifts} handleDragOver={handleDragOver} handleDrop={handleDrop} handleOnDrag={handleOnDrag} setFocusDay={setFocusDay} focusDay={focusDay} currentWeek={currentWeek} currentYear={currentYear}>
+        <WeekDay duplicateShift={duplicateShift} moveShift={moveShift} rightClickedShift={rightClickedShift} setRightClickedShift={setRightClickedShift} day={4} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shifts={shifts} handleDragOver={handleDragOver} handleDrop={handleDrop} handleOnDrag={handleOnDrag} setFocusDay={setFocusDay} focusDay={focusDay} currentWeek={currentWeek} currentYear={currentYear}>
           Torsdag
         </WeekDay>
 
-        <WeekDay rightClickedShift={rightClickedShift} setRightClickedShift={setRightClickedShift} day={5} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shifts={shifts} handleDragOver={handleDragOver} handleDrop={handleDrop} handleOnDrag={handleOnDrag} setFocusDay={setFocusDay} focusDay={focusDay} currentWeek={currentWeek} currentYear={currentYear}>
+        <WeekDay duplicateShift={duplicateShift} moveShift={moveShift} rightClickedShift={rightClickedShift} setRightClickedShift={setRightClickedShift} day={5} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shifts={shifts} handleDragOver={handleDragOver} handleDrop={handleDrop} handleOnDrag={handleOnDrag} setFocusDay={setFocusDay} focusDay={focusDay} currentWeek={currentWeek} currentYear={currentYear}>
           Fredag
         </WeekDay>
 
-        <WeekDay rightClickedShift={rightClickedShift} setRightClickedShift={setRightClickedShift} day={6} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shifts={shifts} handleDragOver={handleDragOver} handleDrop={handleDrop} handleOnDrag={handleOnDrag} setFocusDay={setFocusDay} focusDay={focusDay} currentWeek={currentWeek} currentYear={currentYear}>
+        <WeekDay duplicateShift={duplicateShift} moveShift={moveShift} rightClickedShift={rightClickedShift} setRightClickedShift={setRightClickedShift} day={6} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shifts={shifts} handleDragOver={handleDragOver} handleDrop={handleDrop} handleOnDrag={handleOnDrag} setFocusDay={setFocusDay} focusDay={focusDay} currentWeek={currentWeek} currentYear={currentYear}>
           Lördag
         </WeekDay>
 
-        <WeekDay rightClickedShift={rightClickedShift} setRightClickedShift={setRightClickedShift} day={0} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shifts={shifts} handleDragOver={handleDragOver} handleDrop={handleDrop} handleOnDrag={handleOnDrag} setFocusDay={setFocusDay} focusDay={focusDay} currentWeek={currentWeek} currentYear={currentYear}>
+        <WeekDay duplicateShift={duplicateShift} moveShift={moveShift} rightClickedShift={rightClickedShift} setRightClickedShift={setRightClickedShift} day={0} selectedShift={selectedShift} setSelectedShift={setSelectedShift} shifts={shifts} handleDragOver={handleDragOver} handleDrop={handleDrop} handleOnDrag={handleOnDrag} setFocusDay={setFocusDay} focusDay={focusDay} currentWeek={currentWeek} currentYear={currentYear}>
           Söndag
         </WeekDay>
 
@@ -145,15 +239,11 @@ export default function page() {
       <FocusedWeekDay />
 
       {/* Skapa arbetspass
-      <br />
-      se nuvarande arbetspass
-      <br />
+      
       ändra arbetspass
       <br />
       tabort arbetspass
-      <br />
-      ändra inbokade arbetspass
-      <br />
+      
       lägga till och ta bort typer av arbetspass */}
     </div>
   )
