@@ -189,7 +189,7 @@ export default function Page() {
     } else {
       router.push(pathName.split("?")[0])
     }
-  }, [selectedShift])
+  }, [selectedShift, pathName, router])
 
   useEffect(()=>{
     if (focusDay !== null) {
@@ -197,7 +197,7 @@ export default function Page() {
     } else {
       router.push(pathName.split("?")[0])
     }
-  }, [focusDay])
+  }, [focusDay, pathName])
   
 
   const handleOnDrag = (e: React.DragEvent, shift: _Shift) => {
