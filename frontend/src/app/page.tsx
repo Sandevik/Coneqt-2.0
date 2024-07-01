@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <main className="h-full">
       <div className="flex flex-wrap gap-8 pt-4 h-full">
-        {systems.map(system => (<Link key={system.uuid} href={"/"+system.uuid} className="h-24 w-32 rounded-md bg-blue-300 flex justify-center items-center text-xl font-semibold">{system.name}</Link>))}
+        {systems.map(system => (<Link key={system.uuid} href={"/"+system.uuid} className="h-24 w-32  rounded-md bg-gray-200 hover:bg-gray-300 transition-colors flex justify-center items-center text-xl">{system.name}</Link>))}
       </div>
     </main>  
   );
