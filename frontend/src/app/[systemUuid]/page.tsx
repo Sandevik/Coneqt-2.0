@@ -11,7 +11,7 @@ import FocusedWeekDay from "../components/FocusedWeekDay"
 import WeekDay from "@/app/components/WeekDay"
 
 const testShifts: _Shift[] = [{
-  date: "7-4-2024", 
+  date: "7-3-2024", 
   startTime: "17:00", 
   title: "Extern", 
   desc: "Två terminalare och två chaufförer behövs. Kör extern leveranser från Cola till Åhléns", 
@@ -29,15 +29,15 @@ const testShifts: _Shift[] = [{
       desc: "Från: 7806336829", 
       checkable: true
       }, {
-      uuid: "sdalkfla", 
+      uuid: "sdalddkfla", 
       desc: "Från: 7806336830", 
       checkable: true
       }, {
-        uuid: "sdalkfla", 
+        uuid: "sdaffkfla", 
         desc: "Från: 7806336831", 
         checkable: true
       }, {
-        uuid: "sdalkfla", 
+        uuid: "sdalgghhkfla", 
         desc: "Från: 7806336832", 
         checkable: true
       }]
@@ -46,19 +46,19 @@ const testShifts: _Shift[] = [{
       specificOrder: false,
       objectives: [
         {
-          uuid: "sdalkfla", 
+          uuid: "kk", 
           desc: "Till: 7806336833", 
           checkable: true
         }, {
-          uuid: "sdalkfla", 
+          uuid: "jj", 
           desc: "Till: 7806336834", 
           checkable: true
         }, {
-          uuid: "sdalkfla", 
+          uuid: "hhhh", 
           desc: "Till: 7806336835", 
           checkable: true
         }, {
-          uuid: "sdalkfla", 
+          uuid: "gg", 
           desc: "Till: 7806336836", 
           checkable: true
         }
@@ -66,7 +66,7 @@ const testShifts: _Shift[] = [{
     }]
   },
   {
-    date: "7-4-2024", 
+    date: "7-3-2024", 
     startTime: "11:00", 
     title: "Göteborg & Malmö", 
     desc: "Leverera till Göteborg, hämta tom burk i malmö, hämta kylar i Nässjö", 
@@ -92,11 +92,64 @@ const testShifts: _Shift[] = [{
       }, {
         uuid: "ghhhd",
         desc: "Lasta kylar i Nässjö",
-        
-
       }]
     }] 
-  }
+  },
+  {
+    date: "7-4-2024", 
+    startTime: "17:00", 
+    title: "Extern", 
+    desc: "Två terminalare och två chaufförer behövs. Kör extern leveranser från Cola till Åhléns", 
+    workersNeeded: 4, 
+    workers: [], 
+    shiftCompletionPercentage: 60, 
+    uuid: "sdmadaddahhhhggfsds", 
+    recurring: true, 
+    recurringPeriod: 1, 
+    objectives: [{
+      category: "Från Åhléns", 
+      specificOrder: false,
+      objectives: [{
+        uuid: "sdadasdddd", 
+        desc: "Från: 7806336829", 
+        checkable: true
+        }, {
+        uuid: "sdaldddddkfla", 
+        desc: "Från: 7806336830", 
+        checkable: true
+        }, {
+          uuid: "sdafdddfkfla", 
+          desc: "Från: 7806336831", 
+          checkable: true
+        }, {
+          uuid: "sdalgghddhkfla", 
+          desc: "Från: 7806336832", 
+          checkable: true
+        }]
+      }, {
+        category: "Till Åhléns", 
+        specificOrder: false,
+        objectives: [
+          {
+            uuid: "dd", 
+            desc: "Till: 7806336833", 
+            checkable: true
+          }, {
+            uuid: "ff", 
+            desc: "Till: 7806336834", 
+            checkable: true
+          }, {
+            uuid: "ggg", 
+            desc: "Till: 7806336835", 
+            checkable: true
+          }, {
+            uuid: "gghhhhh", 
+            desc: "Till: 7806336836", 
+            checkable: true
+          }
+        ]
+      }]
+    }
 ]
 
 export default function page() {
