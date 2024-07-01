@@ -98,7 +98,7 @@ export default function ExpandedShift({selectedShift, close}: {selectedShift: Sh
                 <div className='flex-1 flex bg-gray-300 rounded-md pr-2 py-4 pl-4 cursor-default'>
                     <div className='flex-1 flex flex-col gap-3'>
                         <div className='flex justify-between items-center'>
-                            <h3 className='text-2xl font-semibold flex items-center gap-2'><RiCalendarTodoFill className='-translate-y-[1px]' /> {selectedShift?.title}</h3>
+                            <h3 className='text-2xl font-semibold flex items-center gap-2'><RiCalendarTodoFill /> {selectedShift?.title}</h3>
                             { selectedShift?.objectives && selectedShift?.objectives?.length > 1 && <select onChange={(e) => setSelectedObjectives(selectedShift?.objectives?.find(o => o.category === e.target.value)|| null)} className='p-2 rounded-md' >
                                 {getDistinctObjectives(selectedShift?.objectives || []).map(category => (<option value={category} key={category}>{category}</option>))}
                             </select>}
@@ -120,7 +120,7 @@ export default function ExpandedShift({selectedShift, close}: {selectedShift: Sh
                             {selectedObjectives?.objectives.sort((a, b) => ((a.orderNum || 0) - (b.orderNum || 0))).map((objective, i) => (
                                 <>
                                     <Objective objective={objective} />
-                                    {i+1 < (selectedObjectives?.objectives.length || 0) && <div className='text-md flex justify-center w-full'><FaArrowDownLong  /></div>}
+                                    {i+1 < (selectedObjectives?.objectives.length || 0) && selectedObjectives.specificOrder ? <div className='text-md flex justify-center w-full'><FaArrowDownLong  /></div> : <></>}
                                 </>
                             ))}
                         </div>

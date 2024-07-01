@@ -23,6 +23,7 @@ const testShifts: _Shift[] = [{
   recurringPeriod: 1, 
   objectives: [{
     category: "Från Åhléns", 
+    specificOrder: false,
     objectives: [{
       uuid: "sdadasdd", 
       desc: "Från: 7806336829", 
@@ -42,6 +43,7 @@ const testShifts: _Shift[] = [{
       }]
     }, {
       category: "Till Åhléns", 
+      specificOrder: false,
       objectives: [
         {
           uuid: "sdalkfla", 
@@ -76,6 +78,7 @@ const testShifts: _Shift[] = [{
     recurringPeriod: 4,
     objectives: [{
       category: "Körning",
+      specificOrder: true,
       objectives: [{
         orderNum: 1,
         uuid: "sdadas",
